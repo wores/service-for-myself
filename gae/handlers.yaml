@@ -1,0 +1,7 @@
+handlers:
+- url: /.*
+  script: _go_app
+  # https強制
+  secure: always
+  # httpsへのリダイレクト時のステータスコード
+  redirect_http_response_code: 301

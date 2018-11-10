@@ -1,0 +1,7 @@
+secret.yaml
+vendor
+
+.DS_Store
+.git
+.go-version
+.python-version

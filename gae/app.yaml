@@ -1,0 +1,17 @@
+runtime: go
+api_version: go1.9
+threadsafe: true
+# 一番性能が低い 28インスタンス時間
+instance_class: F1
+
+includes:
+- secret.yaml
+- handlers.yaml
+
+# 待機するインスタンスは最大１つ 15s超えたらインスタンス起動
+automatic_scaling:
+  min_idle_instances: automatic
+  max_idle_instances: 1
+  min_pending_latency: 15000ms
+  max_pending_latency: automatic
+  max_concurrent_requests: 4
