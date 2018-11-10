@@ -2,4 +2,4 @@ package input
 
 import "errors"
 
-var ErrParseChatEvent = errors.New("failed to parse chat event")
+var ErrParseSlackEvent = errors.New("failed to parse slack event")

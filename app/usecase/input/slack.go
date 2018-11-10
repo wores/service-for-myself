@@ -30,7 +30,7 @@ func ParseFromStringToInputSlackEvent(
 	)
 	if err != nil {
 		log.Errorf(ctx, "errorの中身 = %#v", err)
-		return nil, ErrParseChatEvent
+		return nil, ErrParseSlackEvent
 	}
 	log.Debugf(ctx, "eventsAPIEvent = %#v", eventsAPIEvent)
 	log.Debugf(ctx, "eventsAPIEvent.Type = %s", eventsAPIEvent.Type)
