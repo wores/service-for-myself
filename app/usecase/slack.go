@@ -72,7 +72,7 @@ func (slackUsecase *slackUsecase) DetectAndPostTextFromImageURL(
 			return output.ErrOcr
 		}
 
-		// 画像から抽出した文字列をSlackへ投稿する
+		// 画像から抽出したテキストをSlackへ投稿する
 		err = slackUsecase.slackRepository.PostMessageToSpecifiedChannel(
 			ctx,
 			ev.Channel,

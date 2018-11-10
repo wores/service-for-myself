@@ -30,7 +30,7 @@ func NewSlackAPIHandler(env *config.Env, usecase usecase.SlackUsecase) SlackAPIH
 	return &slackAPIHandler{env, usecase}
 }
 
-// SlackOcrAPIHandler Slackから投稿された画像をOCRで検出して、その文字列をSlackへ投稿する
+// SlackOcrAPIHandler Slackから投稿された画像をOCRで検出して、そのテキストをSlackへ投稿する
 func (handler *slackAPIHandler) Ocr(w http.ResponseWriter, r *http.Request) {
 	envSlack := handler.env.GetSlack()
 	defer r.Body.Close()

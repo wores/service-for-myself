@@ -18,7 +18,7 @@ func (inputSlackEvent *InputSlackEvent) GetEventsAPIEvent() slackevents.EventsAP
 	return inputSlackEvent.eventsAPIEvent
 }
 
-// ParseFromStringToInputSlackEvent 文字列からパースする
+// ParseFromStringToInputSlackEvent 文字列からSlackEventをパースする
 func ParseFromStringToInputSlackEvent(
 	ctx context.Context,
 	bodyString string,
