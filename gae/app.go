@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/wores/gae-wrs-sample/app/config"
-	"github.com/wores/gae-wrs-sample/app/infrastructure/router"
-	"github.com/wores/gae-wrs-sample/app/registry"
+	"github.com/wores/service-for-myself/app/config"
+	"github.com/wores/service-for-myself/app/infrastructure/router"
+	"github.com/wores/service-for-myself/app/registry"
 	"google.golang.org/appengine"
 )
 
