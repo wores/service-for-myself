@@ -1,6 +1,6 @@
 package config
 
-var env = NewEnv()
+var env = newEnv()
 
 // GetEnv 環境変数を扱うEnvを返す
 func GetEnv() *Env {
@@ -18,7 +18,7 @@ func (env *Env) GetSlack() *Slack {
 }
 
 // NewEnv 環境変数用のインスタンスを生成する
-func NewEnv() *Env {
+func newEnv() *Env {
 	env := new(Env)
 	env.slack = NewSlack()
 	return env
