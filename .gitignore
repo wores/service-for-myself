@@ -1,7 +1,10 @@
 secret.yaml
 vendor
+config.sh
+deploy.sh
 
 .DS_Store
 .git
 .go-version
 .python-version
+
