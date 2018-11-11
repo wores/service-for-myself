@@ -50,6 +50,11 @@ func (slackUsecase *slackUsecase) DetectAndPostTextFromImageURL(
 			return nil
 		}
 
+		if ev.SubType == "message_deleted" {
+			log.Debugf(ctx, "削除系は処理しない")
+			return nil
+		}
+
 		if ev.SubType != "file_share" {
 			log.Debugf(ctx, "ファイル以外の投稿は何もしない sub type: %s", ev.SubType)
 			slackUsecase.slackRepository.PostMessageToSpecifiedChannel(
