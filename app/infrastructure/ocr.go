@@ -2,7 +2,6 @@ package infrastructure
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -34,7 +33,9 @@ func (ocrAPI *OcrAPI) DetectTextFromImage(ctx context.Context, url string, authH
 	// vision apiに投げてOCRしてもらう
 	annotations, detectErr := ocrAPI.postImageToCloudVisionAPI(ctx, imageBin)
 	if detectErr != nil {
-		return text, detectErr
+		err := fmt.Errorf("failed to detect. %#v", detectErr)
+		log.Errorf(ctx, err.Error())
+		return text, err
 	}
 
 	if len(annotations) == 0 {
@@ -62,9 +63,9 @@ func (ocrAPI *OcrAPI) postImageToCloudVisionAPI(ctx context.Context, imageBin io
 	}
 
 	// vision apiに渡す画像を生成
-	image, readErr := vision.NewImageFromReader(imageBin)
-	if readErr != nil {
-		return nil, readErr
+	image, readerErr := vision.NewImageFromReader(imageBin)
+	if readerErr != nil {
+		return nil, readerErr
 	}
 
 	// vision apiにOCRしてもらう
@@ -83,8 +84,9 @@ func (ocrAPI *OcrAPI) fetchImageFromURL(ctx context.Context, url string, authHea
 	client := urlfetch.Client(ctx)
 	res, resErr := client.Do(req)
 	if resErr != nil {
-		errText := fmt.Sprintf("response error. status code %#v", res)
-		return nil, errors.New(errText)
+		err := fmt.Errorf("failed to request image. %#v", resErr)
+		log.Errorf(ctx, err.Error())
+		return nil, err
 	}
 
 	return res.Body, nil
