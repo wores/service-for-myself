@@ -4,6 +4,8 @@ GAE/Goで動いているサービス
 
 - Slackの特定のチャンネルに投稿された画像ファイル内のテキストをOCRで検出して投稿する
 
+<img src="sample.png" width=80%>
+
 ### 設定
 
 gae以下に `secret.yaml` を作成して、下記コードを入力する
