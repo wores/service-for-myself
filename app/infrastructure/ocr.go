@@ -23,14 +23,13 @@ func NewOcrAPI() *OcrAPI {
 // DetectTextFromImage URLの画像からOCRを実行する
 func (ocrAPI *OcrAPI) DetectTextFromImage(ctx context.Context, url string, authHeaderValue string) (text string, err error) {
 	text = "none"
-	// urlから画像取得
+
 	imageBin, fetchErr := ocrAPI.fetchImageFromURL(ctx, url, authHeaderValue)
 	if fetchErr != nil {
 		return text, fetchErr
 	}
 	defer imageBin.Close()
 
-	// vision apiに投げてOCRしてもらう
 	annotations, detectErr := ocrAPI.postImageToCloudVisionAPI(ctx, imageBin)
 	if detectErr != nil {
 		err := fmt.Errorf("failed to detect. %#v", detectErr)
@@ -56,19 +55,16 @@ func (ocrAPI *OcrAPI) DetectTextFromImage(ctx context.Context, url string, authH
 
 // postImageToCloudVisionAPI vision apiに検出してもらう画像を投げる
 func (ocrAPI *OcrAPI) postImageToCloudVisionAPI(ctx context.Context, imageBin io.ReadCloser) ([]*pb.EntityAnnotation, error) {
-	// vision api用のclientを作成
 	client, createErr := vision.NewImageAnnotatorClient(ctx)
 	if createErr != nil {
 		return nil, createErr
 	}
 
-	// vision apiに渡す画像を生成
 	image, readerErr := vision.NewImageFromReader(imageBin)
 	if readerErr != nil {
 		return nil, readerErr
 	}
 
-	// vision apiにOCRしてもらう
 	annotations, detectErr := client.DetectTexts(ctx, image, nil, 10)
 	if detectErr != nil {
 		return nil, detectErr
@@ -77,7 +73,7 @@ func (ocrAPI *OcrAPI) postImageToCloudVisionAPI(ctx context.Context, imageBin io
 	return annotations, nil
 }
 
-// URLから画像を取得する
+// fetchImageFromURL URLから画像を取得する
 func (ocrAPI *OcrAPI) fetchImageFromURL(ctx context.Context, url string, authHeaderValue string) (image io.ReadCloser, err error) {
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Authorization", authHeaderValue)
