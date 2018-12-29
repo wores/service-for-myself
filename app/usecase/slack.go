@@ -32,7 +32,7 @@ func NewSlackUsecase(
 }
 
 // DetectTextFromImageURL URLの画像からテキストを検出する
-func (slackUsecase *slackUsecase) DetectAndPostTextFromImageURL(
+func (s *slackUsecase) DetectAndPostTextFromImageURL(
 	ctx context.Context,
 	slackAPIEvent *input.InputSlackEvent,
 ) error {
@@ -57,7 +57,7 @@ func (slackUsecase *slackUsecase) DetectAndPostTextFromImageURL(
 
 		if ev.SubType != "file_share" {
 			log.Debugf(ctx, "ファイル以外の投稿は何もしない sub type: %s", ev.SubType)
-			slackUsecase.slackRepository.PostMessageToSpecifiedChannel(
+			s.slackRepository.PostMessageToSpecifiedChannel(
 				ctx,
 				ev.Channel,
 				"画像を投稿したらOCRしてあげるよ",
@@ -67,10 +67,10 @@ func (slackUsecase *slackUsecase) DetectAndPostTextFromImageURL(
 
 		log.Infof(ctx, "file content = %#v", ev.Files)
 		// 画像からテキストを抽出するAPIを実行する
-		detectedText, err := slackUsecase.ocrRepository.DetectTextFromImage(
+		detectedText, err := s.ocrRepository.DetectTextFromImage(
 			ctx,
 			ev.Files[0].URLPrivate,
-			slackUsecase.env.GetSlack().GetAccessTokenWithBearer(),
+			s.env.GetSlack().GetAccessTokenWithBearer(),
 		)
 		if err != nil {
 			log.Errorf(ctx, "error: %#v", err)
@@ -78,7 +78,7 @@ func (slackUsecase *slackUsecase) DetectAndPostTextFromImageURL(
 		}
 
 		// 画像から抽出したテキストをSlackへ投稿する
-		err = slackUsecase.slackRepository.PostMessageToSpecifiedChannel(
+		err = s.slackRepository.PostMessageToSpecifiedChannel(
 			ctx,
 			ev.Channel,
 			detectedText,
