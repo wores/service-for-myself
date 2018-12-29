@@ -31,8 +31,8 @@ func NewSlackAPIHandler(env *config.Env, usecase usecase.SlackUsecase) SlackAPIH
 }
 
 // SlackOcrAPIHandler Slackから投稿された画像をOCRで検出して、そのテキストをSlackへ投稿する
-func (handler *slackAPIHandler) Ocr(w http.ResponseWriter, r *http.Request) {
-	envSlack := handler.env.GetSlack()
+func (h *slackAPIHandler) Ocr(w http.ResponseWriter, r *http.Request) {
+	envSlack := h.env.GetSlack()
 	defer r.Body.Close()
 	ctx := appengine.NewContext(r)
 
@@ -53,18 +53,18 @@ func (handler *slackAPIHandler) Ocr(w http.ResponseWriter, r *http.Request) {
 	// 初回だけ通る認可
 	if inputSlackEvents.GetEventsAPIEvent().Type == slackevents.URLVerification {
 		log.Debugf(ctx, "verrification")
-		handler.authorize(ctx, w, bufString)
+		h.authorize(ctx, w, bufString)
 		return
 	}
 
-	if handler.usecase.DetectAndPostTextFromImageURL(ctx, inputSlackEvents) == nil {
+	if h.usecase.DetectAndPostTextFromImageURL(ctx, inputSlackEvents) == nil {
 		w.WriteHeader(http.StatusOK)
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
-func (handler *slackAPIHandler) authorize(ctx context.Context, w http.ResponseWriter, bufString string) {
+func (h *slackAPIHandler) authorize(ctx context.Context, w http.ResponseWriter, bufString string) {
 	var challengeRes *slackevents.ChallengeResponse
 	err := json.Unmarshal([]byte(bufString), &challengeRes)
 	if err != nil {
